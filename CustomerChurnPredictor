@@ -1,0 +1,536 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "de530138",
+   "metadata": {
+    "_cell_guid": "b1076dfc-b9ad-4769-8c92-a6c4dae69d19",
+    "_uuid": "8f2839f25d086af736a60e9eeb907d3b93b6e0e5",
+    "execution": {
+     "iopub.execute_input": "2026-03-20T07:58:33.552478Z",
+     "iopub.status.busy": "2026-03-20T07:58:33.552044Z",
+     "iopub.status.idle": "2026-03-20T07:58:43.321060Z",
+     "shell.execute_reply": "2026-03-20T07:58:43.320119Z"
+    },
+    "papermill": {
+     "duration": 9.776817,
+     "end_time": "2026-03-20T07:58:43.323469",
+     "exception": false,
+     "start_time": "2026-03-20T07:58:33.546652",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " Train:(594194, 21)\n",
+      "Test:(254655, 20)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>id</th>\n",
+       "      <th>gender</th>\n",
+       "      <th>SeniorCitizen</th>\n",
+       "      <th>Partner</th>\n",
+       "      <th>Dependents</th>\n",
+       "      <th>tenure</th>\n",
+       "      <th>PhoneService</th>\n",
+       "      <th>MultipleLines</th>\n",
+       "      <th>InternetService</th>\n",
+       "      <th>OnlineSecurity</th>\n",
+       "      <th>...</th>\n",
+       "      <th>DeviceProtection</th>\n",
+       "      <th>TechSupport</th>\n",
+       "      <th>StreamingTV</th>\n",
+       "      <th>StreamingMovies</th>\n",
+       "      <th>Contract</th>\n",
+       "      <th>PaperlessBilling</th>\n",
+       "      <th>PaymentMethod</th>\n",
+       "      <th>MonthlyCharges</th>\n",
+       "      <th>TotalCharges</th>\n",
+       "      <th>Churn</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>Male</td>\n",
+       "      <td>0</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>29</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>No</td>\n",
+       "      <td>DSL</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>...</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>One year</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Mailed check</td>\n",
+       "      <td>60.10</td>\n",
+       "      <td>1653.85</td>\n",
+       "      <td>No</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>1</td>\n",
+       "      <td>Male</td>\n",
+       "      <td>0</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>58</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>No</td>\n",
+       "      <td>DSL</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>...</td>\n",
+       "      <td>No</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>No</td>\n",
+       "      <td>Two year</td>\n",
+       "      <td>No</td>\n",
+       "      <td>Credit card (automatic)</td>\n",
+       "      <td>69.50</td>\n",
+       "      <td>3778.20</td>\n",
+       "      <td>No</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>2</td>\n",
+       "      <td>Male</td>\n",
+       "      <td>0</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>No</td>\n",
+       "      <td>58</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Fiber optic</td>\n",
+       "      <td>No</td>\n",
+       "      <td>...</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Month-to-month</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Electronic check</td>\n",
+       "      <td>100.40</td>\n",
+       "      <td>5841.35</td>\n",
+       "      <td>No</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>3</td>\n",
+       "      <td>Female</td>\n",
+       "      <td>0</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>No</td>\n",
+       "      <td>Fiber optic</td>\n",
+       "      <td>No</td>\n",
+       "      <td>...</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>Month-to-month</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Electronic check</td>\n",
+       "      <td>69.70</td>\n",
+       "      <td>70.70</td>\n",
+       "      <td>Yes</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>4</td>\n",
+       "      <td>Female</td>\n",
+       "      <td>0</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>No</td>\n",
+       "      <td>Fiber optic</td>\n",
+       "      <td>No</td>\n",
+       "      <td>...</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>No</td>\n",
+       "      <td>Month-to-month</td>\n",
+       "      <td>Yes</td>\n",
+       "      <td>Electronic check</td>\n",
+       "      <td>70.45</td>\n",
+       "      <td>70.45</td>\n",
+       "      <td>Yes</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 21 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   id  gender  SeniorCitizen Partner Dependents  tenure PhoneService  \\\n",
+       "0   0    Male              0     Yes        Yes      29          Yes   \n",
+       "1   1    Male              0     Yes        Yes      58          Yes   \n",
+       "2   2    Male              0     Yes         No      58          Yes   \n",
+       "3   3  Female              0      No         No       1          Yes   \n",
+       "4   4  Female              0      No         No       1          Yes   \n",
+       "\n",
+       "  MultipleLines InternetService OnlineSecurity  ... DeviceProtection  \\\n",
+       "0            No             DSL            Yes  ...              Yes   \n",
+       "1            No             DSL            Yes  ...               No   \n",
+       "2           Yes     Fiber optic             No  ...               No   \n",
+       "3            No     Fiber optic             No  ...               No   \n",
+       "4            No     Fiber optic             No  ...               No   \n",
+       "\n",
+       "  TechSupport StreamingTV StreamingMovies        Contract PaperlessBilling  \\\n",
+       "0         Yes          No              No        One year              Yes   \n",
+       "1         Yes         Yes              No        Two year               No   \n",
+       "2          No         Yes             Yes  Month-to-month              Yes   \n",
+       "3          No          No              No  Month-to-month              Yes   \n",
+       "4          No          No              No  Month-to-month              Yes   \n",
+       "\n",
+       "             PaymentMethod MonthlyCharges  TotalCharges  Churn  \n",
+       "0             Mailed check          60.10       1653.85     No  \n",
+       "1  Credit card (automatic)          69.50       3778.20     No  \n",
+       "2         Electronic check         100.40       5841.35     No  \n",
+       "3         Electronic check          69.70         70.70    Yes  \n",
+       "4         Electronic check          70.45         70.45    Yes  \n",
+       "\n",
+       "[5 rows x 21 columns]"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#knowing data\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "from sklearn.model_selection import StratifiedKFold\n",
+    "from sklearn.preprocessing import LabelEncoder\n",
+    "import lightgbm as lgb\n",
+    "from sklearn.metrics import roc_auc_score\n",
+    "\n",
+    "train=pd.read_csv(\"/kaggle/input/competitions/playground-series-s6e3/train.csv\")\n",
+    "test=pd.read_csv(\"/kaggle/input/competitions/playground-series-s6e3/test.csv\")\n",
+    "\n",
+    "print(f\" Train:{train.shape}\")\n",
+    "print(f\"Test:{test.shape}\")\n",
+    "train.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "b6fdda3e",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-03-20T07:58:43.331639Z",
+     "iopub.status.busy": "2026-03-20T07:58:43.331219Z",
+     "iopub.status.idle": "2026-03-20T07:58:43.436566Z",
+     "shell.execute_reply": "2026-03-20T07:58:43.435572Z"
+    },
+    "papermill": {
+     "duration": 0.111395,
+     "end_time": "2026-03-20T07:58:43.438391",
+     "exception": false,
+     "start_time": "2026-03-20T07:58:43.326996",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Churn\n",
+      "No     460377\n",
+      "Yes    133817\n",
+      "Name: count, dtype: int64\n",
+      "\n",
+      " Churn Rate : 22.5%\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(train['Churn'].value_counts())\n",
+    "print(f\"\\n Churn Rate : {(train[\"Churn\"]=='Yes').mean():.1%}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "1e31bd5c",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-03-20T07:58:43.444164Z",
+     "iopub.status.busy": "2026-03-20T07:58:43.443566Z",
+     "iopub.status.idle": "2026-03-20T07:58:46.317537Z",
+     "shell.execute_reply": "2026-03-20T07:58:46.316462Z"
+    },
+    "papermill": {
+     "duration": 2.878944,
+     "end_time": "2026-03-20T07:58:46.319462",
+     "exception": false,
+     "start_time": "2026-03-20T07:58:43.440518",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Categorical columns to encode:['gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod']\n",
+      "\n",
+      "19 features:['gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', 'MonthlyCharges', 'TotalCharges']\n"
+     ]
+    }
+   ],
+   "source": [
+    "test_ids=test[\"id\"]\n",
+    "\n",
+    "train[\"TotalCharges\"]=pd.to_numeric(train[\"TotalCharges\"],errors=\"coerce\").fillna(0)\n",
+    "test[\"TotalCharges\"]=pd.to_numeric(train[\"TotalCharges\"],errors=\"coerce\").fillna(0)\n",
+    "\n",
+    "train[\"Churn\"]=(train[\"Churn\"]=='Yes').astype(int)\n",
+    "\n",
+    "cat_cols=train.select_dtypes(include=\"object\").columns.tolist() #select text/non numbered columns\n",
+    "print(f\"Categorical columns to encode:{cat_cols}\")\n",
+    "\n",
+    "for x in cat_cols:\n",
+    "    le=LabelEncoder()\n",
+    "    le.fit(pd.concat([train[x],test[x]]).astype(str))\n",
+    "    train[x]=le.transform(train[x].astype(str))\n",
+    "    test[x]=le.transform(test[x].astype(str))\n",
+    "\n",
+    "feature_cols=[c for c in train.columns if c not in [\"id\",\"Churn\"]]\n",
+    "X=train[feature_cols]\n",
+    "y=train[\"Churn\"]\n",
+    "X_test=test[feature_cols]\n",
+    "\n",
+    "print(f\"\\n{len(feature_cols)} features:{feature_cols}\")\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "95670850",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-03-20T07:58:46.325656Z",
+     "iopub.status.busy": "2026-03-20T07:58:46.325005Z",
+     "iopub.status.idle": "2026-03-20T08:02:06.441534Z",
+     "shell.execute_reply": "2026-03-20T08:02:06.440563Z"
+    },
+    "papermill": {
+     "duration": 200.121732,
+     "end_time": "2026-03-20T08:02:06.443540",
+     "exception": false,
+     "start_time": "2026-03-20T07:58:46.321808",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Training until validation scores don't improve for 50 rounds\n",
+      "Early stopping, best iteration is:\n",
+      "[804]\tvalid_0's binary_logloss: 0.298941\n",
+      "Fold 1: AUC= 0.91570\n",
+      "Training until validation scores don't improve for 50 rounds\n",
+      "Early stopping, best iteration is:\n",
+      "[660]\tvalid_0's binary_logloss: 0.296841\n",
+      "Fold 2: AUC= 0.91683\n",
+      "Training until validation scores don't improve for 50 rounds\n",
+      "Early stopping, best iteration is:\n",
+      "[712]\tvalid_0's binary_logloss: 0.298108\n",
+      "Fold 3: AUC= 0.91625\n",
+      "Training until validation scores don't improve for 50 rounds\n",
+      "Early stopping, best iteration is:\n",
+      "[893]\tvalid_0's binary_logloss: 0.296041\n",
+      "Fold 4: AUC= 0.91740\n",
+      "Training until validation scores don't improve for 50 rounds\n",
+      "Early stopping, best iteration is:\n",
+      "[748]\tvalid_0's binary_logloss: 0.300463\n",
+      "Fold 5: AUC= 0.91464\n",
+      "\n",
+      " Overall cv auc score: 0.91616\n"
+     ]
+    }
+   ],
+   "source": [
+    "N_FOLDS=5\n",
+    "\n",
+    "skf=StratifiedKFold(n_splits=N_FOLDS,shuffle=True,random_state=42)\n",
+    "\n",
+    "oof_pred=np.zeros(len(X))\n",
+    "test_preds=np.zeros(len(X_test))\n",
+    "\n",
+    "for fold,(train_idx,val_idx) in enumerate(skf.split(X,y)):\n",
+    "    X_tr,X_val=X.iloc[train_idx],X.iloc[val_idx]\n",
+    "    y_tr,y_val=y.iloc[train_idx],y.iloc[val_idx]\n",
+    "    model=lgb.LGBMClassifier(\n",
+    "        n_estimators=1000,\n",
+    "        learning_rate=0.05,\n",
+    "        max_depth=6,\n",
+    "        num_leaves=31,\n",
+    "        random_state=42,\n",
+    "        verbosity=-1\n",
+    "    )\n",
+    "    model.fit(\n",
+    "        X_tr,y_tr,\n",
+    "        eval_set=[(X_val,y_val)],\n",
+    "        callbacks=[lgb.early_stopping(50),lgb.log_evaluation(0)]\n",
+    "    )\n",
+    "    oof_pred[val_idx]=model.predict_proba(X_val)[:,1]\n",
+    "    test_preds+=model.predict_proba(X_test)[:,1]/N_FOLDS\n",
+    "    #auc:%times model got it right\n",
+    "    print(f\"Fold {fold+1}: AUC= {roc_auc_score(y_val,oof_pred[val_idx]):.5f}\")\n",
+    "\n",
+    "print(f\"\\n Overall cv auc score: {roc_auc_score(y,oof_pred):.5f}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "31f54857",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-03-20T08:02:06.451237Z",
+     "iopub.status.busy": "2026-03-20T08:02:06.450643Z",
+     "iopub.status.idle": "2026-03-20T08:02:07.022442Z",
+     "shell.execute_reply": "2026-03-20T08:02:07.021431Z"
+    },
+    "papermill": {
+     "duration": 0.577841,
+     "end_time": "2026-03-20T08:02:07.024439",
+     "exception": false,
+     "start_time": "2026-03-20T08:02:06.446598",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "       id     Churn\n",
+      "0  594194  0.038222\n",
+      "1  594195  0.001055\n",
+      "2  594196  0.626969\n",
+      "3  594197  0.080010\n",
+      "4  594198  0.536301\n",
+      "5  594199  0.292960\n",
+      "6  594200  0.940392\n",
+      "7  594201  0.052598\n",
+      "8  594202  0.516849\n",
+      "9  594203  0.329226\n",
+      "\n",
+      "Saved 254655 predictions\n"
+     ]
+    }
+   ],
+   "source": [
+    "submission = pd.DataFrame({\"id\": test_ids, \"Churn\": test_preds})\n",
+    "submission.to_csv(\"submission.csv\", index=False)\n",
+    "print(submission.head(10))\n",
+    "print(f\"\\nSaved {len(submission)} predictions\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kaggle": {
+   "accelerator": "none",
+   "dataSources": [
+    {
+     "databundleVersionId": 15805622,
+     "sourceId": 125197,
+     "sourceType": "competition"
+    }
+   ],
+   "dockerImageVersionId": 31286,
+   "isGpuEnabled": false,
+   "isInternetEnabled": true,
+   "language": "python",
+   "sourceType": "notebook"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.12"
+  },
+  "papermill": {
+   "default_parameters": {},
+   "duration": 217.526991,
+   "end_time": "2026-03-20T08:02:07.747500",
+   "environment_variables": {},
+   "exception": null,
+   "input_path": "__notebook__.ipynb",
+   "output_path": "__notebook__.ipynb",
+   "parameters": {},
+   "start_time": "2026-03-20T07:58:30.220509",
+   "version": "2.6.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
